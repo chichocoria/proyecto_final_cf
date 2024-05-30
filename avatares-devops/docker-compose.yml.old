@@ -1,14 +1,14 @@
 version: "3"
 services:
   api:
-    image: chichocoria/avatares-devops-api:1.0.0
+    build: ./api
     ports:
       - "5000:5000"
     environment:
       - FLASK_APP=app.py
       - FLASK_ENV=development
   web:
-    image: chichocoria/avatares-devops-web:1.0.0
+    build: ./web
     network_mode: "host"
     environment:
       - VITE_HOST=0.0.0.0
