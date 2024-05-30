@@ -1,0 +1,15 @@
+version: "3"
+services:
+  api:
+    build: ./api
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+  web:
+    build: ./web
+    network_mode: "host"
+    environment:
+      - VITE_HOST=0.0.0.0
+      - VITE_PORT=5173
