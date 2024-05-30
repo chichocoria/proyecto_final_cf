@@ -1,0 +1,6 @@
+- name: Agregar al file hosts los nombres de los nodos del cluster
+  hosts: all
+  remote_user: darioc
+  tasks:
+    - name: Correr script para agregar hostnames si es que no existen.
+      ansible.builtin.script: /home/darioc/proxmox/ansible/scripts/add-hosts-to-hostsfile.sh

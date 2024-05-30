@@ -1,0 +1,10 @@
+- name: install rke2 on master node
+  hosts: all
+  tasks:
+  - name: Add host kubernetes-master-1
+    shell: |
+      sudo sed -i '$ a 192.168.52.104 kubernetes-master-1' /etc/hosts
+      sudo sed -i '$ a 192.168.52.103 kubernetes-node-2' /etc/hosts
+      sudo sed -i '$ a 192.168.52.102 kubernetes-node-1' /etc/hosts
+  - name: Comentar la linea en el archivo cloud.cfg
+    shell: sudo sed -i '37s/^/#/' /etc/cloud/cloud.cfg
