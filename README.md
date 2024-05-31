@@ -124,7 +124,7 @@ Con estos pasos ya deberiamos tener la infraestructura para poder instalar Kuber
 
 
 
-## Probar aplicacion desde Docker con Docker-Compose
+## Probar aplicacion en un entorno de prueba con Docker-Compose
 Instalar docker y docker compose
 ```
 sudo apt update
