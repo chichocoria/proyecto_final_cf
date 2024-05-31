@@ -198,11 +198,12 @@ kubectl port-forward service/web 9081:5000 -n avatares
 
 ### Ingress para que pueda acceder desde afuera
 Consideraciones a tener en cuenta.
-Debemos tener un LoadBalancer, en mi caso en K3s instale MetalLB
-Como controlador de ingreso instale nginx-ingress-controller
-Cert Managar instalado para asegurar el ingreso desde afuera con letsencrypt
-Un dominio: yo use el mio: chicho.com.ar
-Un DNS: utilizo la capa gratuita de Cloudflare, para hacer pruebas vamos a usar el subdomino avatares.chicho.com.ar
+
+* Debemos tener un LoadBalancer, en mi caso en K3s instale MetalLB
+* Como controlador de ingreso instale nginx-ingress-controller
+* Cert Managar instalado para asegurar el ingreso desde afuera con letsencrypt
+* Un dominio: yo use el mio: chicho.com.ar
+* Un DNS: utilizo la capa gratuita de Cloudflare, para hacer pruebas vamos a usar el subdomino avatares.chicho.com.ar
 
 Hacer un kubectl apply del file 03-ingress-app-web.yaml
 ```
