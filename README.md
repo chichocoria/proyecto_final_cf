@@ -122,6 +122,8 @@ terraform apply
 
 Con estos pasos ya deberiamos tener la infraestructura para poder instalar Kubernetes.
 
+
+
 ## Probar aplicacion desde Docker con Docker-Compose
 Instalar docker y docker compose
 ```
@@ -155,5 +157,68 @@ http://IP:5173/
 ## Instalar K3s para realizar los deploy de la aplicacion.
 Desde mi blog hay una entrada de como instalar K3s.
 [How to setup a Kubernetes Cluster with K3S and MetalLB on Proxmox](https://blog.chicho.com.ar/how-to-deploy-a-kubernetes-cluster-with-k3s/)
+
+
+### Deployment del Back
+
+Para hacer el deployment del back, vamos a ir al directorio k8s dentro del repo
+```
+cd k8s/
+```
+
+Crear un namespace llamado avatares
+```
+kubectl create namespace avatares
+```
+
+Aplicar el file 01-deployment-avatares-api.yaml, esto va a crear el deployment y tambien el service de tipo ClusterIP
+```
+kubectl apply -f 01-deployment-avatares-api.yaml -n avatares
+```
+
+Hacer un port-forward para verificar que el back esta funcionando
+```
+kubectl port-forward service/api 9080:5000 -n avatares
+```
+
+### Deployment del Front
+
+Dentro del mismo directorio k8s
+
+
+Aplicar el file 02-deployment-avatares-web.yaml, esto va a crear el deployment y tambien el service de tipo ClusterIP
+```
+kubectl apply -f 02-deployment-avatares-web.yaml -n avatares
+```
+
+Hacer un port-forward para verificar que el front esta funcionando correctamente y se pueda comunicar con el back
+```
+kubectl port-forward service/web 9081:5000 -n avatares
+```
+
+### Ingress para que pueda acceder desde afuera
+Consideraciones a tener en cuenta.
+Debemos tener un LoadBalancer, en mi caso en K3s instale MetalLB
+Como controlador de ingreso instale nginx-ingress-controller
+Cert Managar instalado para asegurar el ingreso desde afuera con letsencrypt
+Un dominio: yo use el mio: chicho.com.ar
+Un DNS: utilizo la capa gratuita de Cloudflare, para hacer pruebas vamos a usar el subdomino avatares.chicho.com.ar
+
+Hacer un kubectl apply del file 03-ingress-app-web.yaml
+```
+kubectl apply -f 03-ingress-app-web.yaml -n avatares
+```
+
+Si corremos un kubectl get ingress podemos verificar q se creo el ingres y el cert TLS
+![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/db108e77-cce9-4b6c-ad66-90840354204e)
+
+
+Ahora podemos acceder a la URL para ver la aplicacion corriendo
+
+[Avatares app](https://avatares.chicho.com.ar/)
+
+
+
+
 
 
