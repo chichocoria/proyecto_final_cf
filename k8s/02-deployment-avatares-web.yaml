@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: chichocoria/avatares-devops-web:1.0.0
+          image: chichocoria/avatares-devops-web:1.0.1
           env:
             - name: VITE_HOST
               value: "0.0.0.0"
