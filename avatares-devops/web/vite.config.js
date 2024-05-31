@@ -15,7 +15,7 @@ export default defineConfig({
     proxy: {
       '^/api': {
 //        target: 'http://127.0.0.1:5000',
-          target: 'http://api:5000',  
+          target: 'http://api:5000',  //si lo vamos a usar en k8s el path deberia ser el nombre de la app (api) mas el puerto
         changeOrigin: true
       }
     }
