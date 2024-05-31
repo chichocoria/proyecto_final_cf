@@ -108,4 +108,52 @@ export PM_API_TOKEN_ID='terraform-prov@pve!infra'
 export PM_API_TOKEN_SECRET="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 ```
 
+Correr los siguientes comando en terraform
+```
+## Iniciar
+terraform init
+## Validar
+terraform validate
+## Plan para corroborar que se va a terraformar
+terraform plan
+## Apply para aplicar
+terraform apply
+```
+
+Con estos pasos ya deberiamos tener la infraestructura para poder instalar Kubernetes.
+
+## Probar aplicacion desde Docker con Docker-Compose
+Instalar docker y docker compose
+```
+sudo apt update
+sudo apt install docker.io docker-compose -y
+```
+
+Clonarse el repositorio:
+```
+git clone https://github.com/chichocoria/proyecto_final_cf.git
+```
+
+Dirigirse al directorio cd avatares-devops/
+
+```
+cd avatares-devops/
+```
+
+Correr docker-compose
+
+```
+docker-compose up -d
+```
+
+Acceder desde:
+http://IP:5173/
+
+
+
+
+## Instalar K3s para realizar los deploy de la aplicacion.
+Desde mi blog hay una entrada de como instalar K3s.
+[How to setup a Kubernetes Cluster with K3S and MetalLB on Proxmox](https://blog.chicho.com.ar/how-to-deploy-a-kubernetes-cluster-with-k3s/)
+
 
