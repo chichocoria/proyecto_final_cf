@@ -1,0 +1,8 @@
+- name: install rke2 on master node
+  hosts: master
+  tasks:
+  - name: Upgrade all apt packages
+    apt:
+      force_apt_get: yes
+      upgrade: dist
+    become: yes
