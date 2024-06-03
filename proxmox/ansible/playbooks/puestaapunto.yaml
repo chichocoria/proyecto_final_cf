@@ -12,3 +12,6 @@
       ansible.builtin.script: ../scripts/add-hosts-to-hostsfile.sh
     - name: Comment line on cloud.cfg file
       ansible.builtin.script: ../scripts/modify_cloudcgf_file.sh
+    - name: Install docker and docker-compose
+      become: yes
+      shell: apt install docker.io docker-compose -y
