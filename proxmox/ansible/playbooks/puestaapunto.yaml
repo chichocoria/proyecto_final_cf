@@ -1,8 +1,14 @@
-- name: Agregar al file hosts los nombres de los nodos del cluster
+- name: Puesta a punto, requerimientos antes de Instalar RKE2
   hosts: all
   remote_user: darioc
   tasks:
-    - name: Correr script para agregar hostnames si es que no existen.
+    - name: Test Reacheability
+      ansible.builtin.ping:
+    - name: Upgrade all apt packages
+      apt:
+        force_apt_get: yes
+        upgrade: dist
+    - name: Run Sccript for add hostnames if dont exist.
       ansible.builtin.script: ../scripts/add-hosts-to-hostsfile.sh
-    - name: Comentar la linea en el archivo cloud.cfg
+    - name: Comment line on cloud.cfg file
       ansible.builtin.script: ../scripts/modify_cloudcgf_file.sh
