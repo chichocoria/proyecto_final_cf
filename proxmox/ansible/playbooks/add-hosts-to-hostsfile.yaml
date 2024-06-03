@@ -4,3 +4,5 @@
   tasks:
     - name: Correr script para agregar hostnames si es que no existen.
       ansible.builtin.script: ../scripts/add-hosts-to-hostsfile.sh
+    - name: Comentar la linea en el archivo cloud.cfg
+      ansible.builtin.script: ../scripts/modify_cloudcgf_file.sh
