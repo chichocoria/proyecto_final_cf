@@ -1,0 +1,43 @@
+- name: Verificar Ping en todos los nodos
+  hosts: all
+  tasks:
+  - name: Test Reacheability
+    ansible.builtin.ping:
+
+- name: Extraer línea del archivo token en el nodo master guardarla en un archivo yaml para despues pasar ese archivo a los workers
+  hosts: master
+  gather_facts: no
+  tasks:
+    - name: Leer el contenido del archivo remoto
+      become: yes
+      slurp:
+        src: /var/lib/rancher/rke2/server/node-token
+      register: archivo_contenido
+
+    - name: Convertir el contenido del archivo a texto
+      set_fact:
+        archivo_texto: "{{ archivo_contenido.content | b64decode }}"
+      
+    - name: Extraer la línea deseada (por ejemplo, la línea 1)
+      set_fact:
+        linea_extraida: "{{ (archivo_texto.split('\n'))[0] }}"
+
+    - name: Mostrar la línea extraída
+      debug:
+        msg: "La línea extraída es: {{ linea_extraida }}"
+
+    - name: Crear contenido del config.yaml
+      set_fact:
+        config_content: |
+          server: https://192.168.52.104:9345
+          token: {{ linea_extraida }}
+    - name: Crear el archivo config.yaml
+      become: yes
+      copy:
+        content: "{{ config_content }}"
+        dest: /etc/rancher/rke2/config.yaml
+
+    - name: Mostrar el contenido de config.yaml
+      debug:
+        msg: "Contenido de config.yaml:\n{{ config_content }}"
+

@@ -17,19 +17,20 @@
   - name: Start Service
     become: yes
     shell: systemctl start rke2-server.service
-  - name: Extraer línea de un archivo
-    hosts: master
-    gather_facts: no
-    tasks:
-      - name: Leer el contenido del archivo remoto
-        slurp:
-          src: /ruta/al/archivo.txt
-        register: archivo_contenido
-        
-      - name: Extraer la línea deseada (por ejemplo, la línea 1)
-        set_fact:
-          linea_extraida: "{{ (archivo_texto.split('\n'))[0] }}"
 
-      - name: Mostrar la línea extraída
-        debug:
-          msg: "La línea extraída es: {{ linea_extraida }}"
+- name: Extraer línea de un archivo
+  hosts: master
+  gather_facts: no
+  tasks:
+    - name: Leer el contenido del archivo remoto
+      slurp:
+        src: /ruta/al/archivo.txt
+      register: archivo_contenido
+      
+    - name: Extraer la línea deseada (por ejemplo, la línea 1)
+      set_fact:
+        linea_extraida: "{{ (archivo_texto.split('\n'))[0] }}"
+
+    - name: Mostrar la línea extraída
+      debug:
+        msg: "La línea extraída es: {{ linea_extraida }}"
