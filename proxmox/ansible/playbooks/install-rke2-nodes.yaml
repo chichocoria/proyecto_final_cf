@@ -1,0 +1,35 @@
+- name: install rke2 on master node
+  hosts: worker
+  tasks:
+  - name: Test Reacheability
+    ansible.builtin.ping:
+  - name: Upgrade all apt packages
+    apt:
+      force_apt_get: yes
+      upgrade: dist
+    become: yes
+  - name: Ejecutar el instalador
+    become: yes
+    shell: curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sh -
+  - name: Enable service
+    become: yes
+    shell: systemctl enable rke2-server.service
+  - name: Start Service
+    become: yes
+    shell: systemctl start rke2-server.service
+  - name: Extraer línea de un archivo
+    hosts: master
+    gather_facts: no
+    tasks:
+      - name: Leer el contenido del archivo remoto
+        slurp:
+          src: /ruta/al/archivo.txt
+        register: archivo_contenido
+        
+      - name: Extraer la línea deseada (por ejemplo, la línea 1)
+        set_fact:
+          linea_extraida: "{{ (archivo_texto.split('\n'))[0] }}"
+
+      - name: Mostrar la línea extraída
+        debug:
+          msg: "La línea extraída es: {{ linea_extraida }}"

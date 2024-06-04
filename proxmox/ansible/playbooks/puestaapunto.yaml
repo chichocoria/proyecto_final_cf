@@ -8,6 +8,7 @@
       apt:
         force_apt_get: yes
         upgrade: dist
+      become: yes
     - name: Run Sccript for add hostnames if dont exist.
       ansible.builtin.script: ../scripts/add-hosts-to-hostsfile.sh
     - name: Comment line on cloud.cfg file
