@@ -14,18 +14,20 @@
   - name: Enable service
     become: yes
     shell: systemctl enable rke2-server.service
-  - name: Start Service
-    become: yes
-    shell: systemctl start rke2-server.service
 
-- name: Extraer línea de un archivo
+- name: Extraer línea del archivo token en el nodo master guardarla en un archivo yaml para despues pasar ese archivo a los workers
   hosts: master
   gather_facts: no
   tasks:
     - name: Leer el contenido del archivo remoto
+      become: yes
       slurp:
-        src: /ruta/al/archivo.txt
+        src: /var/lib/rancher/rke2/server/node-token
       register: archivo_contenido
+
+    - name: Convertir el contenido del archivo a texto
+      set_fact:
+        archivo_texto: "{{ archivo_contenido.content | b64decode }}"
       
     - name: Extraer la línea deseada (por ejemplo, la línea 1)
       set_fact:
@@ -34,3 +36,48 @@
     - name: Mostrar la línea extraída
       debug:
         msg: "La línea extraída es: {{ linea_extraida }}"
+
+    - name: Crear contenido del config.yaml
+      set_fact:
+        config_content: |
+          server: https://192.168.52.104:9345
+          token: {{ linea_extraida }}
+    - name: Crear el archivo config.yaml
+      become: yes
+      copy:
+        content: "{{ config_content }}"
+        dest: /etc/rancher/rke2/config.yaml
+
+    - name: Mostrar el contenido de config.yaml
+      debug:
+        msg: "Contenido de config.yaml:\n{{ config_content }}"
+
+    - name: Descargar config.yaml al controlador
+      fetch:
+        src: /etc/rancher/rke2/config.yaml
+        dest: /tmp/
+        flat: yes
+
+
+- name: Copiar config.yaml desde el controlador a los nodos workers
+  hosts: worker
+  gather_facts: no
+  tasks:
+    - name: Crear directorio
+      become: yes
+      ansible.builtin.file:
+        path: /etc/rancher/rke2/
+        state: directory
+    - name: Copiar el archivo config.yaml a los nodos workers
+      become: yes
+      copy:
+        src: /tmp/config.yaml
+        dest: /etc/rancher/rke2/config.yaml
+
+
+- name: Habilitar servicio rke2 agent
+  hosts: worker
+  tasks:
+  - name: Start Service
+    become: yes
+    shell: systemctl start rke2-agent.service

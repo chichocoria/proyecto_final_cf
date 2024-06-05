@@ -10,8 +10,10 @@
         upgrade: dist
       become: yes
     - name: Run Sccript for add hostnames if dont exist.
+      become: yes
       ansible.builtin.script: ../scripts/add-hosts-to-hostsfile.sh
     - name: Comment line on cloud.cfg file
+      become: yes
       ansible.builtin.script: ../scripts/modify_cloudcgf_file.sh
     - name: Install docker and docker-compose
       become: yes

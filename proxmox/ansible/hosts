@@ -1,7 +1,7 @@
 # File: hosts
 [master]
-192.168.52.104 ansible_ssh_private_key_file=/home/darioc/.ssh/id_ed25519 ansible_user=darioc remote_user=darioc
+server ansible_host=192.168.52.104 ansible_ssh_private_key_file=/home/darioc/.ssh/id_ed25519 ansible_user=darioc remote_user=darioc
 
 [worker]
-192.168.52.102 ansible_ssh_private_key_file=/home/darioc/.ssh/id_ed25519 ansible_user=darioc remote_user=darioc
-192.168.52.103 ansible_ssh_private_key_file=/home/darioc/.ssh/id_ed25519 ansible_user=darioc remote_user=darioc
+node1 ansible_host=192.168.52.102 ansible_ssh_private_key_file=/home/darioc/.ssh/id_ed25519 ansible_user=darioc remote_user=darioc
+node2 ansible_host=192.168.52.103 ansible_ssh_private_key_file=/home/darioc/.ssh/id_ed25519 ansible_user=darioc remote_user=darioc

@@ -4,6 +4,7 @@
   - name: Test Reacheability
     ansible.builtin.ping:
 
+
 - name: Extraer línea del archivo token en el nodo master guardarla en un archivo yaml para despues pasar ese archivo a los workers
   hosts: master
   gather_facts: no
@@ -41,3 +42,24 @@
       debug:
         msg: "Contenido de config.yaml:\n{{ config_content }}"
 
+    - name: Descargar config.yaml al controlador
+      fetch:
+        src: /etc/rancher/rke2/config.yaml
+        dest: /tmp/
+        flat: yes
+
+
+- name: Copiar config.yaml desde el controlador a los nodos workers
+  hosts: worker
+  gather_facts: no
+  tasks:
+    - name: Crear directorio
+      become: yes
+      ansible.builtin.file:
+        path: /etc/rancher/rke2/
+        state: directory
+    - name: Copiar el archivo config.yaml a los nodos workers
+      become: yes
+      copy:
+        src: /tmp/config.yaml
+        dest: /etc/rancher/rke2/config.yaml
