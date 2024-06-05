@@ -1,3 +1,4 @@
+#!/bin/bash
 # Ruta al archivo
 archivo="/etc/hosts"
 
