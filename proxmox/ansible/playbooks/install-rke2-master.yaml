@@ -23,6 +23,7 @@
     shell: systemctl start rke2-server.service
 
   - name: Descargar config.yaml al controlador
+    become: yes
     fetch:
       src: /etc/rancher/rke2/rke2.yaml
       dest: /tmp/
@@ -33,10 +34,17 @@
   tasks:
     - name: Crear carpeta en el controlador
       file:
-        path: ~/.kube/config
+        path: ~/.kube
         state: directory
         mode: '0755'
     - name: Copiar archivo usando el módulo copy
       copy:
         src: /tmp/rke2.yaml
-        dest: /.kube/config
+        dest: ~/.kube/rke2.yaml
+    - name: Renombrar archivo removiendo su extensión
+      command: mv ~/.kube/rke2.yaml ~/.kube/config
+    - name: Reemplazar "127.0.0.1" por "192.168.52.104" en el archivo
+      replace:
+        path: ~/.kube/config
+        regexp: '127\.0\.0\.1'
+        replace: '192.168.52.104'
