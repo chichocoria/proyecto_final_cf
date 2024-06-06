@@ -3,17 +3,40 @@
   tasks:
   - name: Test Reacheability
     ansible.builtin.ping:
+  
   - name: Upgrade all apt packages
     apt:
       force_apt_get: yes
       upgrade: dist
     become: yes
+  
   - name: Ejecutar el instalador
     become: yes
     shell: curl -sfL https://get.rke2.io | sh -
+  
   - name: Enable service
     become: yes
     shell: systemctl enable rke2-server.service
+  
   - name: Start Service
     become: yes
     shell: systemctl start rke2-server.service
+
+  - name: Descargar config.yaml al controlador
+    fetch:
+      src: /etc/rancher/rke2/rke2.yaml
+      dest: /tmp/
+      flat: yes
+
+- name: Crear una carpeta en el host donde está instalado Ansible
+  hosts: localhost
+  tasks:
+    - name: Crear carpeta en el controlador
+      file:
+        path: ~/.kube/config
+        state: directory
+        mode: '0755'
+    - name: Copiar archivo usando el módulo copy
+      copy:
+        src: /tmp/rke2.yaml
+        dest: /.kube/config
