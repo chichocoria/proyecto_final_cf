@@ -16,10 +16,20 @@ kubectl create namespace metallb
 #4 - Install metalLB en el namespace metallb
 helm install metallb metallb/metallb --namespace metallb
 #5 - Verificar la instalación
-kubectl get pods -n metallb-system
+kubectl get pods -n metallb
 #6 Aplicar la configuración de MetalLB
 kubectl apply -f metallb-config.yaml
 # Verificar la configuración
-kubectl get configmap -n metallb-system
+kubectl get configmap -n metallb
 
 echo "MetalLB ha sido instalado y configurado correctamente."
+
+#Habilitar el controlador de ingreso Nginx como load balancer para que nos de IP MetalLB
+helm repo add rke2-charts https://rke2-charts.rancher.io/
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm upgrade --install rke2-ingress-nginx ingress-nginx/ingress-nginx --set controller.publishService.enabled=true -n kube-system
+sleep 10
+#Verificar que nginx controller esta como LB
+kubectl get svc rke2-ingress-nginx-controller -n kube-system
+echo "Nginx controller OK como tipo LoadBalancer"
