@@ -3,13 +3,6 @@
 **/.terraform/*
 
 
-
-# .tfstate files
-
-*.tfstate
-
-*.tfstate.*
-
 # Kubectl
 kubectl
 kubectl.*
