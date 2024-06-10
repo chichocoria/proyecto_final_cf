@@ -24,7 +24,7 @@ provider "proxmox" {
 
 ##Configuramos la API del provider de Cloudflare
 provider "cloudflare" {
-  # token pulled from $CLOUDFLARE_API_TOKEN
+  api_token = "a1fi_0_uJuXRXwgNTBssLRwSRVTOX_N7eOvci2gD"
 }
 
 

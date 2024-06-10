@@ -126,3 +126,24 @@ resource "proxmox_vm_qemu" "k8s-agent" {
   EOF
 }
 
+################################ CLOUDFLARE ###############################
+
+variable "zone_id" {
+  default = "var.zone_id"
+}
+
+variable "account_id" {
+  default = "var.account_id"
+}
+
+variable "domain" {
+  default = "chicho.com.ar"
+}
+
+resource "cloudflare_record" "rke2prueba" {
+  zone_id = var.zone_id
+  name    = "rke2prueba"
+  value   = "chicho.com.ar"
+  type    = "CNAME"
+  proxied = true
+}
