@@ -20,7 +20,7 @@ pipeline {
     stage('Building image api') {
       steps{
         script {
-          dockerImageapi = docker.build registryapi + ":$BUILD_NUMBER", "./avatares-devops/api/"
+          dockerImageapi = docker.build("registryapi:${env.BUILD_NUMBER}", "./avatares-devops/api/")
         }
       }
     }
