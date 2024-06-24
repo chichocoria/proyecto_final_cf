@@ -20,15 +20,7 @@ pipeline {
     stage('Building image api') {
       steps{
         script {
-          dockerImageapi = docker.build("registryapi:${env.BUILD_NUMBER}", "./avatares-devops/api/")
-        }
-      }
-    }
-//Corremos el docker build para generar la imagen, usamos la variable BUILD_NUMBER para el versionado.
-    stage('Building image web') {
-      steps{
-        script {
-          dockerImageweb = docker.build registryweb + ":$BUILD_NUMBER", "-f ./avatares-devops/web/Dockerfile ./avatares-devops/web"
+          dockerImageapi = sh 'docker build -t pruebaapi ./avatares-devops/api'
         }
       }
     }
@@ -47,7 +39,6 @@ pipeline {
       steps{
         //sh "docker-compose down"  
         sh "docker rmi $registryapi:$BUILD_NUMBER"
-        sh "docker rmi $registryweb:$BUILD_NUMBER"
       }
     }
   }
