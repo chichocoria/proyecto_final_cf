@@ -1,49 +1,38 @@
 pipeline {
-//Variables que se utilizan, el repo de dockerhub y la credencial de dockerhub que se cargo en  jenkins.
-  environment {
-    registry = "chichocoria/avatares-devops-api"
-    registryweb = "chichocoria/avatares-devops-web"
-    registryCredential = 'chichocoria-dockerhub'
-    dockerImage = ''
-    dockerImageweb = ''
-  }
-  agent any
-  stages {
-//Clonamos el repo de git
-    stage('Cloning Git') {
-      steps {
-        sh "pwd"
-        git branch: "testing", url: 'https://github.com/chichocoria/proyecto_final_cf.git'
-      }
+    agent any
+
+    environment {
+        REPO_URL = 'https://github.com/chichocoria/proyecto_final_cf.git'
+        BRANCH = 'testing' // Cambia esto si necesitas otra rama
+        IMAGE_NAME = 'chichocoria/avatares-devops-api'
+        DOCKERFILE_PATH = 'avatares-devops/api/Dockerfile'
+        CONTEXT = 'avatares-devops/api'
+        registryCredential = 'chichocoria-dockerhub'
     }
-//Corremos el docker build para generar la imagen, usamos la variable BUILD_NUMBER para el versionado.
-    stage('Building image api') {
-      steps{
-        script {
-          dir('./avatares-devops/api') {
-          //dockerImageapi = sh 'docker build -t pruebaapi ./avatares-devops/api'
-          //dockerImage = docker.build("${env.DOCKER_IMAGE}:${env.DOCKER_TAG}")
-          dockerimage = docker.build("${env.dockerImage}:${env.BUILD_NUMBER}")
-          }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: "${BRANCH}", url: "${REPO_URL}"
+            }
         }
-      }
-    }
-//Manda la imagen a dockerhub
-    stage('Deploy Image api') {
-      steps{
-        script {
-          docker.withRegistry( '', registryCredential ) {
-            dockerImage.push()
-          }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${IMAGE_NAME}", "-f ${DOCKERFILE_PATH} ${CONTEXT}")
+                }
+            }
         }
-      }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry( '', registryCredential) {
+                        docker.image("${IMAGE_NAME}").push()
+                    }
+                }
+            }
+        }
     }
-//Hace un remove de la imagen que generamos para dejar todo limpio y tambien elimina los contenedores de prueba generados
-    stage('Remove Unused docker image') {
-      steps{
-        //sh "docker-compose down"  
-        sh "docker rmi $registry:$BUILD_NUMBER"
-      }
-    }
-  }
 }
