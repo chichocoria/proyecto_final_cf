@@ -20,9 +20,11 @@ pipeline {
     stage('Building image api') {
       steps{
         script {
+          dir('avatares-devops/api') {
           //dockerImageapi = sh 'docker build -t pruebaapi ./avatares-devops/api'
           //dockerImage = docker.build("${env.DOCKER_IMAGE}:${env.DOCKER_TAG}")
-          dockerimage = docker.build("${env.dockerImage}:${env.BUILD_NUMBER}, -f ./avatares-devops/api/Dockerfile ./avatares-devops/api")
+          dockerimage = docker.build("${env.dockerImage}:${env.BUILD_NUMBER}")
+          }
         }
       }
     }
