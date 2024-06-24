@@ -1,10 +1,10 @@
 pipeline {
 //Variables que se utilizan, el repo de dockerhub y la credencial de dockerhub que se cargo en  jenkins.
   environment {
-    registryapi = "chichocoria/avatares-devops-api"
+    registry = "chichocoria/avatares-devops-api"
     registryweb = "chichocoria/avatares-devops-web"
     registryCredential = 'chichocoria-dockerhub'
-    dockerImageapi = ''
+    dockerImage = ''
     dockerImageweb = ''
   }
   agent any
@@ -21,7 +21,7 @@ pipeline {
       steps{
         script {
           //dockerImageapi = sh 'docker build -t pruebaapi ./avatares-devops/api'
-          dockerImageapi = docker.build registryapi + ":$BUILD_NUMBER", "-f ./avatares-devops/api/Dockerfile ./avatares-devops/api"
+          dockerImage = docker.build registry + ":$BUILD_NUMBER", "-f ./avatares-devops/api/Dockerfile ./avatares-devops/api"
         }
       }
     }
@@ -30,7 +30,7 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
-            dockerImageapi.push()
+            dockerImage.push()
           }
         }
       }
@@ -39,7 +39,7 @@ pipeline {
     stage('Remove Unused docker image') {
       steps{
         //sh "docker-compose down"  
-        sh "docker rmi $registryapi:$BUILD_NUMBER"
+        sh "docker rmi $registry:$BUILD_NUMBER"
       }
     }
   }
