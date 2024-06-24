@@ -1,7 +1,7 @@
 pipeline {
 //Variables que se utilizan, el repo de dockerhub y la credencial de dockerhub que se cargo en  jenkins.
   environment {
-    registryapi = "chichocoria/avatares-devops-web"
+    registryapi = "chichocoria/avatares-devops-api"
     registryweb = "chichocoria/avatares-devops-web"
     registryCredential = 'chichocoria-dockerhub'
     dockerImage = ''
