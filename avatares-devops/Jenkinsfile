@@ -21,7 +21,8 @@ pipeline {
       steps{
         script {
           //dockerImageapi = sh 'docker build -t pruebaapi ./avatares-devops/api'
-          dockerImage = docker.build registry + ":$BUILD_NUMBER", "-f ./avatares-devops/api/Dockerfile ./avatares-devops/api"
+          //dockerImage = docker.build registry + ":$BUILD_NUMBER", "-f ./avatares-devops/api/Dockerfile ./avatares-devops/api"
+           dockerimage = docker.build("chichocoria/avatares-devops-api:${env.BUILD_ID}", "-f ./avatares-devops/api/Dockerfile ./avatares-devops/api")
         }
       }
     }
