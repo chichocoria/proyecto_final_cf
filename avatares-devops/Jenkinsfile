@@ -4,7 +4,8 @@ pipeline {
     registryapi = "chichocoria/avatares-devops-api"
     registryweb = "chichocoria/avatares-devops-web"
     registryCredential = 'chichocoria-dockerhub'
-    dockerImage = ''
+    dockerImageapi = ''
+    dockerImageweb = ''
   }
   agent any
   stages {
@@ -19,7 +20,7 @@ pipeline {
     stage('Building image api') {
       steps{
         script {
-          dockerImage = docker.build registryapi + ":$BUILD_NUMBER", "-f ./avatares-devops/api/Dockerfile ./avatares-devops/api"
+          dockerImageapi = docker.build registryapi + ":$BUILD_NUMBER", "./avatares-devops/api/"
         }
       }
     }
@@ -27,16 +28,16 @@ pipeline {
     stage('Building image web') {
       steps{
         script {
-          dockerImage = docker.build registryweb + ":$BUILD_NUMBER", "-f ./avatares-devops/web/Dockerfile ./avatares-devops/web"
+          dockerImageweb = docker.build registryweb + ":$BUILD_NUMBER", "-f ./avatares-devops/web/Dockerfile ./avatares-devops/web"
         }
       }
     }
 //Manda la imagen a dockerhub
-    stage('Deploy Image') {
+    stage('Deploy Image api') {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
-            dockerImage.push()
+            dockerImageapi.push()
           }
         }
       }
