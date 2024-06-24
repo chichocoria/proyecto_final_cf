@@ -9,12 +9,34 @@ pipeline {
         CONTEXT = 'avatares-devops/api'
         registryCredential = 'chichocoria-dockerhub'
         VERSION = "${BUILD_NUMBER}"
+        SONARQUBE_CREDENTIALS = 'SonarQube-Token'
+        SONARQUBE_URL = 'http://192.168.52.237:9000'
     }
 
     stages {
         stage('Clone Repository') {
             steps {
                 git branch: "${BRANCH}", url: "${REPO_URL}"
+            }
+        }
+
+        
+        stage('SonarQube Analysis') {
+            environment {
+                scannerHome = tool 'SonarQubeScanner'
+            }
+            steps {
+                script {
+                    docker.image('sonarsource/sonar-scanner-cli:latest').inside {
+                        withSonarQubeEnv('SonarQubeServer') {
+                            sh "sonar-scanner \
+                                -Dsonar.projectKey=your-project-key \
+                                -Dsonar.sources=. \
+                                -Dsonar.host.url=${env.SONARQUBE_URL} \
+                                -Dsonar.login=${env.SONARQUBE_CREDENTIALS}"
+                        }
+                    }
+                }
             }
         }
 
