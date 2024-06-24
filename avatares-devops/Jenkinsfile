@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     def fullImageName = "${IMAGE_NAME}:${VERSION}"
-                    docker.build("${IMAGE_NAME}", "-f ${DOCKERFILE_PATH} ${CONTEXT}")
+                    docker.build(fullImageName, "-f ${DOCKERFILE_PATH} ${CONTEXT}")
                 }
             }
         }
