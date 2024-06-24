@@ -1,0 +1,53 @@
+pipeline {
+//Variables que se utilizan, el repo de dockerhub y la credencial de dockerhub que se cargo en  jenkins.
+  environment {
+    registryapi = "chichocoria/avatares-devops-web"
+    registryweb = "chichocoria/avatares-devops-web"
+    registryCredential = 'chichocoria-dockerhub'
+    dockerImage = ''
+  }
+  agent any
+  stages {
+//Clonamos el repo de git
+    stage('Cloning Git') {
+      steps {
+        sh "pwd"
+        git branch: "testing", url: 'https://github.com/chichocoria/proyecto_final_cf.git'
+      }
+    }
+//Corremos el docker build para generar la imagen, usamos la variable BUILD_NUMBER para el versionado.
+    stage('Building image api') {
+      steps{
+        script {
+          dockerImage = docker.build registryapi + ":$BUILD_NUMBER", "-f ./api/Dockerfile ./api"
+        }
+      }
+    }
+//Corremos el docker build para generar la imagen, usamos la variable BUILD_NUMBER para el versionado.
+    stage('Building image web') {
+      steps{
+        script {
+          dockerImage = docker.build registryweb + ":$BUILD_NUMBER", "-f ./web/Dockerfile ./web"
+        }
+      }
+    }
+//Manda la imagen a dockerhub
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
+        }
+      }
+    }
+//Hace un remove de la imagen que generamos para dejar todo limpio y tambien elimina los contenedores de prueba generados
+    stage('Remove Unused docker image') {
+      steps{
+        //sh "docker-compose down"  
+        sh "docker rmi $registryapi:$BUILD_NUMBER"
+        sh "docker rmi $registryweb:$BUILD_NUMBER"
+      }
+    }
+  }
+}
