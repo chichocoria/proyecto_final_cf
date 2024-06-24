@@ -30,6 +30,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
+                    def fullImageName = "${IMAGE_NAME}:${VERSION}"
                     docker.withRegistry( '', registryCredential) {
                         docker.image(fullImageName).push()
                     }
