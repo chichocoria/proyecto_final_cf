@@ -19,7 +19,7 @@ pipeline {
     stage('Building image api') {
       steps{
         script {
-          dockerImage = docker.build registryapi + ":$BUILD_NUMBER", "-f ./api/Dockerfile ./api"
+          dockerImage = docker.build registryapi + ":$BUILD_NUMBER", "-f .avatares-devops/api/Dockerfile ./api"
         }
       }
     }
@@ -27,7 +27,7 @@ pipeline {
     stage('Building image web') {
       steps{
         script {
-          dockerImage = docker.build registryweb + ":$BUILD_NUMBER", "-f ./web/Dockerfile ./web"
+          dockerImage = docker.build registryweb + ":$BUILD_NUMBER", "-f .avatares-devops/web/Dockerfile ./web"
         }
       }
     }
