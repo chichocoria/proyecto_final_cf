@@ -58,7 +58,7 @@ pipeline {
             def fullImageName = "${IMAGE_NAME}:${VERSION}"
             sh "docker-compose down"  
             sh "docker rmi" fullImageName
-      }
-    }
+            }
+        }
     }
 }
