@@ -22,14 +22,13 @@ pipeline {
 
         
         stage('SonarQube Analysis') {
-            environment {
-                scannerHome = tool 'SonarQubeScanner'
-            }
             steps {
                 script {
+                    scannerHome = tool 'SonarQubeScanner'
                   {
-                    withSonarQubeEnv('SonarQube')
+                    withSonarQubeEnv('SonarQube'){
                      sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=SonarQube-Token"
+                    }
                   }
 
                 }
