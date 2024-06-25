@@ -20,21 +20,6 @@ pipeline {
             }
         }
 
-        
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    scannerHome = tool 'SonarQubeScanner'
-                  {
-                    withSonarQubeEnv('SonarQube'){
-                     sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=SonarQube-Token"
-                    }
-                  }
-
-                }
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
