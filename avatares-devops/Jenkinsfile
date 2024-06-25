@@ -55,8 +55,7 @@ pipeline {
 
         stage('Remove Unused docker image') {
           steps{
-            def fullImageName = "${IMAGE_NAME}:${VERSION}"
-            sh "docker rmi" fullImageName
+            sh "docker rmi ${IMAGE_NAME}:${VERSION}"
             }
         }
     }
