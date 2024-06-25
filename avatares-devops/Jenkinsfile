@@ -52,5 +52,13 @@ pipeline {
                 }
             }
         }
+
+        stage('Remove Unused docker image') {
+          steps{
+            def fullImageName = "${IMAGE_NAME}:${VERSION}"
+            sh "docker-compose down"  
+            sh "docker rmi" fullImageName
+      }
+    }
     }
 }
