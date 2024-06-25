@@ -54,6 +54,23 @@ pipeline {
             }
         }
 
+        stage('Update GIT') {
+        script {
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    sh "git config user.email chicho@gmail.com"
+                    sh "git config user.name ChichoCoria"
+                    sh "cat k8s/01-deployment-avatares-api.yaml"
+                    sh "sed -i 's+chichocoria/avatares-devops-api:.*+${IMAGE_NAME}:${VERSION}+g' k8s/01-deployment-avatares-api.yaml"
+                    sh "cat k8s/01-deployment-avatares-api.yaml"
+                    sh "git add ."
+                    sh "git commit -m 'update de manifest del back a la version: ${VERSION}'"
+                    sh "git push @github.com/${GIT_USERNAME}/jenkins-gitops-k8s.git">https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/proyecto_final_cf.git"
+                }
+            }
+        }
+    }
+
         stage('Remove Unused docker image') {
           steps{
             sh "docker rmi ${IMAGE_NAME}:${VERSION}"
