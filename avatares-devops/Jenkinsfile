@@ -9,8 +9,10 @@ pipeline {
         CONTEXT = 'avatares-devops/api'
         registryCredential = 'chichocoria-dockerhub'
         VERSION = "${BUILD_NUMBER}"
-        SONARQUBE_CREDENTIALS = 'SonarQube-Token'
-        SONARQUBE_URL = 'http://192.168.52.237:9000'
+        SONAR_AUTH_TOKEN = 'SonarQube-Token'
+        SONAR_HOST_URL = 'http://192.168.52.237:9000'
+        SONARQUBE_PROJECT_KEY = 'devops-codfac'
+        SONARQUBE_ENV = 'SonarQube'
     }
 
     stages {
@@ -20,11 +22,14 @@ pipeline {
             }
         }
 
-        stage('SonarQube analysis') {
-          def scannerHome = tool 'SonarScanner 4.0';
-          withSonarQubeEnv('SonarQube') { // If you have configured more than one global server connection, you can specify its name
-          sh "${scannerHome}/bin/sonar-scanner"
-          }
+        stage('SonarQube Analysis') {
+          steps {
+            script {
+              withSonarQubeEnv("${SONARQUBE_ENV}") {
+              sh "sonar-scanner -Dsonar.projectKey=${SONARQUBE_PROJECT_KEY} -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
+                   }
+                }
+            }
         }
 
         stage('Build Docker Image') {
