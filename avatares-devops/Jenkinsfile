@@ -27,15 +27,11 @@ pipeline {
             }
             steps {
                 script {
-                    docker.image('sonarsource/sonar-scanner-cli:latest').inside {
-                        withSonarQubeEnv('SonarQubeServer') {
-                            sh "sonar-scanner \
-                                -Dsonar.projectKey=your-project-key \
-                                -Dsonar.sources=. \
-                                -Dsonar.host.url=${env.SONARQUBE_URL} \
-                                -Dsonar.login=${env.SONARQUBE_CREDENTIALS}"
-                        }
-                    }
+                  {
+                    withSonarQubeEnv('SonarQube')
+                     sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=SonarQube-Token"
+                  }
+
                 }
             }
         }
