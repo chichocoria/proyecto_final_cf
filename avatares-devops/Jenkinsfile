@@ -65,7 +65,7 @@ pipeline {
                     sh "cat k8s/01-deployment-avatares-api.yaml"
                     sh "git add ."
                     sh "git commit -m 'update de manifest del back a la version: ${VERSION}'"
-                    sh "git push @github.com/${GIT_USERNAME}/jenkins-gitops-k8s.git">https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/proyecto_final_cf.git"
+                    sh "git push @github.com/${GIT_USERNAME}/proyecto_final_cf.git">https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/proyecto_final_cf.git"
                 }
             }
         }
