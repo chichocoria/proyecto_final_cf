@@ -57,10 +57,10 @@ pipeline {
          stage('Update Kubernetes Deployment') {
             steps {
                 script {
-                    sh "sed -i 's+chichocoria/avatares-devops-api.*+chichocoria/avatares-devops-api:${VERSION}+g' k8s/01-deployment-avatares-api.yaml"
+                    sh "sed -i 's+chichocoria/avatares-devops-api.*+chichocoria/avatares-devops-api:${VERSION}+g' k8s/avatares-deployment/01-deployment-avatares-api.yaml"
                     sh  "git config user.email chicho@chicho.com"
                     sh  "git config user.name Chicho"
-                    sh  "git add k8s/01-deployment-avatares-api.yaml"
+                    sh  "git add k8s/avatares-deployment/01-deployment-avatares-api.yaml"
                     sh  "git commit -m 'Update deployment image for chichocoria/avatares-devops-api:${VERSION}'"
                 
                 }
