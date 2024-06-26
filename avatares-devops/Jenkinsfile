@@ -71,9 +71,9 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        sh '''
+                        sh """
                             git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/chichocoria/proyecto_final_cf.git HEAD:${BRANCH}
-                        '''
+                        """
                     }
                 }
             }
