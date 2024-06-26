@@ -18,7 +18,8 @@ helm install metallb metallb/metallb --namespace metallb
 #5 - Verificar la instalación
 kubectl get pods -n metallb
 #6 Aplicar la configuración de MetalLB
-kubectl apply -f metallb-config.yaml
+sleep 30
+kubectl apply -f ~/proyecto_final_cf/k8s/metallb/metallb-config.yaml
 # Verificar la configuración
 kubectl get configmap -n metallb
 
