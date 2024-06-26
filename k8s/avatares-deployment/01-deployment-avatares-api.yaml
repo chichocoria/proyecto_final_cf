@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: chichocoria/avatares-devops-api:59
+          image: chichocoria/avatares-devops-api:60
           ports:
             - containerPort: 5000
           env:
