@@ -13,6 +13,7 @@ pipeline {
         SONAR_HOST_URL = 'http://192.168.52.237:9000'
         SONARQUBE_PROJECT_KEY = 'devops-codfac'
         SONARQUBE_ENV = 'SonarQube'
+        GITHUB_CREDENTIALS = 'github'
     }
 
     stages {
@@ -54,22 +55,33 @@ pipeline {
             }
         }
 
-        stage('Update GIT') {
-        script {
-            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    sh "git config user.email chicho@gmail.com"
-                    sh "git config user.name ChichoCoria"
-                    sh "cat k8s/01-deployment-avatares-api.yaml"
-                    sh "sed -i 's+chichocoria/avatares-devops-api:.*+${IMAGE_NAME}:${VERSION}+g' k8s/01-deployment-avatares-api.yaml"
-                    sh "cat k8s/01-deployment-avatares-api.yaml"
-                    sh "git add ."
-                    sh "git commit -m 'update de manifest del back a la version: ${VERSION}'"
-                    sh "git push @github.com/${GIT_USERNAME}/proyecto_final_cf.git">https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/proyecto_final_cf.git"
+         stage('Update Kubernetes Deployment') {
+            steps {
+                script {
+                    def directory = "k8s/01-deployment-avatares-api.yaml"
+                    sh '''
+                        sed -i 's|chichocoria/avatares-devops-api:[^ ]*|chichocoria/avatares-devops-api:${VERSION}|g' "${directory}"
+                        git config user.email "chicho@chicho.com"
+                        git config user.name "Chicho"
+                        git add k8s/01-deployment-avatares-api.yaml
+                        git commit -m "Update deployment image for chichocoria/avatares-devops-api:${VERSION}"
+                    '''
                 }
             }
         }
-    }
+
+        stage('Push Changes to GitHub') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                        sh '''
+                            git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/chichocoria/proyecto_final_cf.git HEAD:${BRANCH}
+                        '''
+                    }
+                }
+            }
+        }
+        
 
         stage('Remove Unused docker image') {
           steps{
