@@ -59,7 +59,7 @@ pipeline {
                 script {
                     def directory = "k8s/01-deployment-avatares-api.yaml"
                     sh '''
-                        sed -i 's|chichocoria/avatares-devops-api:[^ ]*|chichocoria/avatares-devops-api:${VERSION}|g' "${directory}"
+                        sed -i 's|chichocoria/avatares-devops-api:[^ ]*|chichocoria/avatares-devops-api:${VERSION}|g "${directory}"'
                         git config user.email "chicho@chicho.com"
                         git config user.name "Chicho"
                         git add k8s/01-deployment-avatares-api.yaml
