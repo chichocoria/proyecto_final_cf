@@ -62,7 +62,7 @@ pipeline {
                         git config user.email "chicho@chicho.com"
                         git config user.name "Chicho"
                         git add k8s/01-deployment-avatares-api.yaml
-                        git commit -m "Update deployment image for chichocoria/avatares-devops-api:${version}"
+                        git commit -m "Update deployment image for chichocoria/avatares-devops-api:${VERSION}"
                     """
                 }
             }
