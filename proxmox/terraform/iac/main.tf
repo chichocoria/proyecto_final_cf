@@ -147,3 +147,11 @@ resource "cloudflare_record" "rke2prueba" {
   type    = "CNAME"
   proxied = true
 }
+
+resource "cloudflare_record" "rke2prueba" {
+  zone_id = var.zone_id
+  name    = "avatares2"
+  value   = "chicho.com.ar"
+  type    = "CNAME"
+  proxied = true
+}
