@@ -49,7 +49,6 @@ pipeline {
                     def fullImageName = "${IMAGE_NAME}:${VERSION}"
                     docker.withRegistry( '', registryCredential) {
                         docker.image(fullImageName).push()
-                        docker.image("latest").push()
                     }
                 }
             }
