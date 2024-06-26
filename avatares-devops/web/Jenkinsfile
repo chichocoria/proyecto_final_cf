@@ -4,15 +4,16 @@ pipeline {
     environment {
         REPO_URL = 'https://github.com/chichocoria/proyecto_final_cf.git'
         BRANCH = 'testing' // Cambia esto si necesitas otra rama
-        IMAGE_NAME = 'chichocoria/avatares-devops-api'
-        DOCKERFILE_PATH = 'avatares-devops/api/Dockerfile'
-        CONTEXT = 'avatares-devops/api'
+        IMAGE_NAME = 'chichocoria/avatares-devops-web'
+        DOCKERFILE_PATH = 'avatares-devops/web/Dockerfile'
+        CONTEXT = 'avatares-devops/web'
         registryCredential = 'chichocoria-dockerhub'
         VERSION = "${BUILD_NUMBER}"
         SONAR_AUTH_TOKEN = 'SonarQube-Token'
         SONAR_HOST_URL = 'http://192.168.52.237:9000'
         SONARQUBE_PROJECT_KEY = 'devops-codfac'
         SONARQUBE_ENV = 'SonarQube'
+        GITHUB_CREDENTIALS = 'github'
     }
 
     stages {
@@ -48,11 +49,36 @@ pipeline {
                     def fullImageName = "${IMAGE_NAME}:${VERSION}"
                     docker.withRegistry( '', registryCredential) {
                         docker.image(fullImageName).push()
-                        docker.image("latest").push()
                     }
                 }
             }
         }
+
+         stage('Update Kubernetes Deployment') {
+            steps {
+                script {
+                    sh "sed -i 's+chichocoria/avatares-devops-web.*+chichocoria/avatares-devops-web:${VERSION}+g' k8s/02-deployment-avatares-web.yaml"
+                    sh "git config user.email chicho@chicho.com"
+                    sh "git config user.name Chicho"
+                    sh "git add k8s/02-deployment-avatares-web.yaml"
+                    sh "git commit -m 'Update deployment image for chichocoria/avatares-devops-web:${VERSION}'"
+                
+                }
+            }
+        }
+
+        stage('Push Changes to GitHub') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                        sh """
+                            git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/chichocoria/proyecto_final_cf.git HEAD:${BRANCH}
+                        """
+                    }
+                }
+            }
+        }
+        
 
         stage('Remove Unused docker image') {
           steps{

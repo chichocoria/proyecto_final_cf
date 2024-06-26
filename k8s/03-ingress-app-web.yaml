@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - avatares.chicho.com.ar
+    - avatares2.chicho.com.ar
     secretName: avatares-tls
   rules:
-  - host: "avatares.chicho.com.ar"
+  - host: "avatares2.chicho.com.ar"
     http:
       paths:
       - pathType: Prefix
