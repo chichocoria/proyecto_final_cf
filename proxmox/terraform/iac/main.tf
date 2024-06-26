@@ -148,7 +148,7 @@ resource "cloudflare_record" "rke2prueba" {
   proxied = true
 }
 
-resource "cloudflare_record" "rke2prueba" {
+resource "cloudflare_record" "avatares2" {
   zone_id = var.zone_id
   name    = "avatares2"
   value   = "chicho.com.ar"
