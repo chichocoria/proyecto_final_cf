@@ -32,7 +32,6 @@ resource "proxmox_vm_qemu" "k8s-server" {
   cpu         = "host"
   memory      = 4096
   scsihw      = "virtio-scsi-pci"
-  bootdisk    = "scsi0"
 
   disks {
     scsi {
@@ -88,7 +87,6 @@ resource "proxmox_vm_qemu" "k8s-agent" {
   cpu         = "host"
   memory      = 4096
   scsihw      = "virtio-scsi-pci"
-  bootdisk    = "scsi0"
 
   disks {
     scsi {
