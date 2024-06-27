@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REPO_URL = 'https://github.com/chichocoria/proyecto_final_cf.git'
-        BRANCH = 'testing' // Cambia esto si necesitas otra rama
+        BRANCH = 'testing' // Cambia esto si necesitas otra rama o branch
         IMAGE_NAME = 'chichocoria/avatares-devops-api'
         DOCKERFILE_PATH = 'avatares-devops/api/Dockerfile'
         CONTEXT = 'avatares-devops/api'
