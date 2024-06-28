@@ -121,7 +121,7 @@ git clone https://github.com/chichocoria/proyecto_final_cf.git
 cd proxmox/terraform/iac/
 ```
 
-Pasar por variables de entorno el usuario pass, api token id y api token secret para tener comunicacion con proxmox y con CloudFlare
+##### - Pasar por variables de entorno el usuario pass, api token id y api token secret para tener comunicacion con proxmox y con CloudFlare
 ```
 export PM_USER="terraform-prov@pve"
 export PM_PASS="password"
@@ -131,7 +131,7 @@ export PM_API_TOKEN_SECRET="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 export CLOUDFLARE_API_TOKEN=<cloudflare_token>
 ```
 
-Crear el archivo terraform.tfvars con las variables
+##### - Crear el archivo terraform.tfvars con las variables
 ```
 ##Definimos las variables para proxmox
 pm_api_url              = "https://ip_proxmox:8006/api2/json"
@@ -144,8 +144,7 @@ zone_id                 = "<zone_id>"
 account_id              = "<account_id>" 
 ```
 
-
-Correr los siguientes comando en terraform
+##### - Correr los siguientes comando en terraform
 ```
 ## Iniciar
 terraform init
@@ -158,7 +157,9 @@ terraform apply
 ```
 
 Con estos pasos ya deberiamos tener la infraestructura para poder instalar Kubernetes.
-
+ * 1 Server Master
+ * 2 Server Workers
+ * Los registros DNS para utlizar con el Ingress Controller
 
 
 ## Probar aplicacion en un entorno de prueba con Docker-Compose
