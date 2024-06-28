@@ -2,8 +2,25 @@
 
 # Proyecto Final - Bootcamp Devops
 
+### Requisitos Previos:
+
+#### - Un hosts con las tools:
+ * Kubectl
+ * Helm
+ * Terraform
+ * Ansible
+ * Jenkins
+ * SonarQube
+
 ## Infraestructura como servicio
-Se utiliza Terraform comno IaC para correr sobre el hypervisor Proxmox y se usa el provider de Telmate.
+
+<p align="center">
+<img src="https://github.com/chichocoria/proyecto_final_cf/assets/66035606/d641d6a4-d3e1-4d6e-93f2-e062ba75f653)"> 
+</p>
+
+ * Se utiliza Terraform comno IaC para correr sobre el hypervisor Proxmox y se usa el provider de Telmate.
+ * Tambien se utiliza el provider de Cloudflare para agregar registros de tipo CNAME
+ * Como configuracion management se usa Ansible para instalar Cluster RKE2
 
 ### Pasos para correr las VMS en donde vamos correr el cluster de RKE2
 
@@ -21,7 +38,7 @@ virt-customize -a jammy-server-cloudimg-amd64.img --install qemu-guest-agent
 
 ```
 
-Creacion del template:
+##### - Creacion del template:
 
 ```
 qm create 9022 --name "ubuntu-2204-cloudinit-template" --memory 2048 --cores 2 --net0 virtio,bridge=vmbr0
@@ -34,7 +51,7 @@ qm set 9022 --agent enabled=1
 qm template 9022
 ```
 
-Creacion de SSH Key para poder acceder:
+##### - Creacion de SSH Key para poder acceder:
 ```
 #Generar clave SSH
 
@@ -44,7 +61,7 @@ copiar contenido de la key publica en la GUI de Proxmox>>seleccionamos el templa
 
 ```
 
-Dentro de Proxmox conectarse por ssh
+##### - En el Hypervisor Proxmox conectarse por ssh
 
 ```
 # 1. Crear Role
@@ -60,18 +77,23 @@ pveum user add terraform-prov@pve --password <password>
 pveum aclmod / -user terraform-prov@pve -role TerraformProv
 ```
 
-Crear un api Token para usarlo en Terraform:
-En la GUI de Proxmox nos dirigimos a Datacenter>>API Tokens>>Add
-En User elejir el usuario terraform_user@pve
-Destildar "Privilege Separation"
-Guardar el Token en un lugar seguro para despues utilizarlo.
+##### - Crear un api Token para usarlo en Terraform:
+
+* En la GUI de Proxmox nos dirigimos a Datacenter>>API Tokens>>Add
+* En User elejir el usuario terraform_user@pve
+* Destildar "Privilege Separation"
+* Guardar el Token en un lugar seguro para despues utilizarlo.
 
 ![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/0e92969c-4dfb-4b56-a1b4-4de3e2fe862d)
 
-### En el host donde usar Terraform:
 
+## Terraform
 
-Pasos para instalar terraform sobre Ubuntu Server 22.04
+> [!IMPORTANT]  
+> Para mantener seguro nuestro archivo de estado en terraform se utlizo Terraform Cloud
+ 
+
+##### - Pasos para instalar terraform sobre Ubuntu Server 22.04
 ```
 sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
 wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
@@ -83,32 +105,46 @@ sudo apt-get install terraform
 terraform -version
 ```
 
-### Iniciar Terraform y applicar los files para crear las VMS
-En el siguiente ejemplo se van a crear:
-1 VM para control plane
-2 VMs para workers
+### Iniciar Terraform para aprovisionar la infraestructura en Proxmox
+##### - En el siguiente ejemplo se van a crear:
+ * 1 VM para control plane
+ * 2 VMs para workers
 
-Clonarse el repositorio:
+##### - Clonarse el repositorio:
 ```
 git clone https://github.com/chichocoria/proyecto_final_cf.git
 ```
 
-Dirigirse al directorio proxmox/terraform/iac/
+##### - Dirigirse al directorio proxmox/terraform/iac/
 
 ```
 cd proxmox/terraform/iac/
 ```
 
-Pasar por variables de entorno el usuario pass, api token id y api token secret para tener comunicacion con proxmox
+##### - Pasar por variables de entorno el usuario pass, api token id y api token secret para tener comunicacion con proxmox y con CloudFlare
 ```
 export PM_USER="terraform-prov@pve"
 export PM_PASS="password"
-## En PM_API_TOKEN_SECRET pegar el token que se creo anteriormente en proxmox
+export PM_API_TOKEN_SECRET=<proxmox_token>
 export PM_API_TOKEN_ID='terraform-prov@pve!infra'
 export PM_API_TOKEN_SECRET="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+export CLOUDFLARE_API_TOKEN=<cloudflare_token>
 ```
 
-Correr los siguientes comando en terraform
+##### - Crear el archivo terraform.tfvars con las variables
+```
+##Definimos las variables para proxmox
+pm_api_url              = "https://ip_proxmox:8006/api2/json"
+cloudinit_template_name = "ubuntu-2204-cloudinit-template"
+proxmox_node            = "<node_name>"
+ssh_key                 = "<ssh-key>"
+
+##Variables de Cloudflare
+zone_id                 = "<zone_id>"
+account_id              = "<account_id>" 
+```
+
+##### - Correr los siguientes comando en terraform
 ```
 ## Iniciar
 terraform init
@@ -121,7 +157,9 @@ terraform apply
 ```
 
 Con estos pasos ya deberiamos tener la infraestructura para poder instalar Kubernetes.
-
+ * 1 Server Master
+ * 2 Server Workers
+ * Los registros DNS para utlizar con el Ingress Controller
 
 
 ## Probar aplicacion en un entorno de prueba con Docker-Compose
