@@ -4,8 +4,6 @@
 
 ## Infraestructura como servicio
 
-
-
 Se utiliza Terraform comno IaC para correr sobre el hypervisor Proxmox y se usa el provider de Telmate.
 Tambien se utiliza el provider de Cloudflare para agregar registros de tipo CNAME
 
