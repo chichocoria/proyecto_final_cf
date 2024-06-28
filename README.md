@@ -4,6 +4,8 @@
 
 ## Infraestructura como servicio
 
+![iac](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/d641d6a4-d3e1-4d6e-93f2-e062ba75f653)
+
 Se utiliza Terraform comno IaC para correr sobre el hypervisor Proxmox y se usa el provider de Telmate.
 Tambien se utiliza el provider de Cloudflare para agregar registros de tipo CNAME
 
