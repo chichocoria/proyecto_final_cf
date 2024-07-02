@@ -161,6 +161,43 @@ Con estos pasos ya deberiamos tener la infraestructura para poder instalar Kuber
  * 2 Server Workers
  * Los registros DNS para utlizar con el Ingress Controller
 
+## Ansible
+Se va a utlilzar Ansible como configuration management para la instalacion de RKE2 en el Server Control Plane y en los dos servers Workers.
+
+### Explicacion de los Playbooks
+
+##### - 01-puestaapunto.yaml
+ * Ping a todos los hosts
+ * Apt update y upgrade
+ * Agrega los hostnames de los 3 server en el archivo hosts
+ * Modifica el file cloud.cfg para q los hostnames queden persistentes
+ * Instala Docker
+
+##### - 02-install-rke2-master.yaml
+ * Instala RKE2 en el master node
+ * Copia el file config.yml del nodo master al host donde esta instalado Ansible
+ * Crea la carpeta .kube
+ * Copia el file config.yml, lo renombra a config y le cambia la IP 127.0.0.1 a la del servidor master
+
+##### - 03-install-rke2-nodes.yaml
+ * Instala RKE2 en los workers nodes
+ * Extraer el token del nodo master
+ * Crea el file config.yml y le agrega el token extraido y la url del master
+ * Lo descarga en el hosts en el directorio /tmp
+ * Lo copia a los nodos workers en el path /etc/rancher/rke2/
+
+```
+#Posicionarse en el siguiente directorio
+cd ~/proyecto_final_cf/proxmox/ansible/
+
+##Correr los playbooks
+ansible-playbook -i hosts  playbooks/01-puestaapunto.yaml
+
+ansible-playbook -i hosts  playbooks/02-install-rke2-master.yaml
+
+ansible-playbook -i hosts  playbooks/03-install-rke2-nodes.yaml
+```
+
 
 ## Probar aplicacion en un entorno de prueba con Docker-Compose
 Instalar docker y docker compose
