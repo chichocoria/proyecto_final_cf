@@ -197,6 +197,11 @@ ansible-playbook -i hosts  playbooks/02-install-rke2-master.yaml
 
 ansible-playbook -i hosts  playbooks/03-install-rke2-nodes.yaml
 ```
+Corriendo los 3 Playbooks, ya deberiamos tener un cluster de RKE2 totalmente funcional.
+ * 1 Master
+ * 2 Workers
+
+![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/beb51e2b-e982-4e4a-a321-c81c1e147f79)
 
 
 ## Probar aplicacion en un entorno de prueba con Docker-Compose
