@@ -13,7 +13,7 @@
     shell: curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sh -
   - name: Enable service
     become: yes
-    shell: systemctl enable rke2-server.service
+    shell: systemctl enable rke2-agent.service
 
 - name: Extraer línea del archivo token en el nodo master guardarla en un archivo yaml para despues pasar ese archivo a los workers
   hosts: master
