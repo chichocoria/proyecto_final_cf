@@ -237,7 +237,10 @@ Argo CD es una herramienta de entrega continua declarativa de GitOps para Kubern
 
 ## Integracion Continua/Implementacion Continua
 Se utiliza jenkins como servidor de Integracion Continua y ArgoCD como implementacion Continua
+
 ![cicd](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/fd361587-c0ca-444c-95f3-7fc6897beae1)
+
+### Jenkins
 
 El back y front tienen un JenkinsFile cada uno con los siguientes steps:
 
@@ -249,6 +252,7 @@ El back y front tienen un JenkinsFile cada uno con los siguientes steps:
  * Push de los cambios de los manifestos a Github
  * Remove de la imagen creada en el host
 
+### ArgoCD
 
 ---
 
