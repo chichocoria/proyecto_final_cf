@@ -277,7 +277,9 @@ Cargar los siguientes datos:
 
 ![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/6642faed-7aa2-4a3a-9a89-d85bcd0bfe61)
 
+Con el CD en Argo ya tenemos el deploy del back y front de la app avatares con sus services e ingress en funcionamiento.
 
+[Avatares2 app](https://avatares2.chicho.com.ar/)
 ---
 
 ## Probar aplicacion en un entorno de prueba con Docker-Compose
