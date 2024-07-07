@@ -86,6 +86,7 @@ pveum aclmod / -user terraform-prov@pve -role TerraformProv
 
 ![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/0e92969c-4dfb-4b56-a1b4-4de3e2fe862d)
 
+---
 
 ## Terraform
 
@@ -161,6 +162,125 @@ Con estos pasos ya deberiamos tener la infraestructura para poder instalar Kuber
  * 2 Server Workers
  * Los registros DNS para utlizar con el Ingress Controller
 
+---
+
+## Ansible
+Se va a utlilzar Ansible como configuration management para la instalacion de RKE2 en el Server Control Plane y en los dos servers Workers.
+
+### Explicacion de los Playbooks
+
+##### - 01-puestaapunto.yaml
+ * Ping a todos los hosts
+ * Apt update y upgrade
+ * Agrega los hostnames de los 3 server en el archivo hosts
+ * Modifica el file cloud.cfg para q los hostnames queden persistentes
+ * Instala Docker
+
+##### - 02-install-rke2-master.yaml
+ * Instala RKE2 en el master node
+ * Copia el file config.yml del nodo master al host donde esta instalado Ansible
+ * Crea la carpeta .kube
+ * Copia el file config.yml, lo renombra a config y le cambia la IP 127.0.0.1 a la del servidor master
+
+##### - 03-install-rke2-nodes.yaml
+ * Instala RKE2 en los workers nodes
+ * Extraer el token del nodo master
+ * Crea el file config.yml y le agrega el token extraido y la url del master
+ * Lo descarga en el hosts en el directorio /tmp
+ * Lo copia a los nodos workers en el path /etc/rancher/rke2/
+
+```
+#Posicionarse en el siguiente directorio
+cd ~/proyecto_final_cf/proxmox/ansible/
+
+##Correr los playbooks
+ansible-playbook -i hosts  playbooks/01-puestaapunto.yaml
+
+ansible-playbook -i hosts  playbooks/02-install-rke2-master.yaml
+
+ansible-playbook -i hosts  playbooks/03-install-rke2-nodes.yaml
+```
+Corriendo los 3 Playbooks, ya deberiamos tener un cluster de RKE2 totalmente funcional.
+ * 1 Master
+ * 2 Workers
+
+![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/beb51e2b-e982-4e4a-a321-c81c1e147f79)
+
+### Instalar tools para el cluster RKE2
+
+#### MetalLB
+MetalLB es una implementación de balanceador de carga para cluster bare-metal kubernetes 
+Se instala MetalLB en el cluster como loadbalancer, no hace falta instalar Nginx Controller por que viene por defecto en la instalacion de RKE2.
+
+```
+~/proyecto_final_cf$ k8s/metallb/instalar-metallb-helm.sh
+```
+
+#### Cert-Manager
+es un controlador de certificados X.509 potente y extensible para cargas de trabajo de Kubernetes y OpenShift. Obtendrá certificados de una variedad de emisores, tanto emisores públicos populares como emisores privados, y garantizará que los certificados sean válidos y estén actualizados, e intentará renovar los certificados en un momento configurado antes de su vencimiento.
+
+```
+~/proyecto_final_cf$ k8s/cert-manager/instalar-cert-manager.sh
+```
+
+#### Argo-CD
+Argo CD es una herramienta de entrega continua declarativa de GitOps para Kubernetes.
+
+```
+~/proyecto_final_cf$ k8s/argocd/instalar-argocd-helm.sh
+```
+
+> [!NOTE]
+> Ya tenemos nuestro Cluster RKE2 con MetaLB, Nginx Controller, Cert-Manager y Argo CD. 
+
+---
+
+## Integracion Continua/Implementacion Continua
+Se utiliza jenkins como servidor de Integracion Continua y ArgoCD como implementacion Continua
+
+![cicd](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/fd361587-c0ca-444c-95f3-7fc6897beae1)
+
+### Jenkins
+
+El back y front tienen un JenkinsFile cada uno con los siguientes steps:
+
+ * Clona el repositorio
+ * Hace un analisis de calidad de codigo con Sonarqube
+ * Build de una nueva imagen y nuevo numero de version
+ * Push de la imagen a DockerHub
+ * Update de los manifestos yaml con la nueva version de la imagen
+ * Push de los cambios de los manifestos a Github
+ * Remove de la imagen creada en el host
+
+### ArgoCD
+Dentro de la GUI de Argo ir a "NEW APP"
+
+Cargar los siguientes datos:
+ 
+*GENERAL* 
+ * Application name: avatares
+ * Project name: default
+ * SYNC Policy: se usa manual o automatico para que sincronize directo cuando hay cambios en el repo
+
+*SOURCE*
+ * Repository URL: https://github.com/chichocoria/proyecto_final_cf.git
+ * Branch: testing
+ * Path: k8s/avatares-deployment/
+
+*DESTINATION*
+ * Cluster URL: https://kubernetes.default.svc
+ * Namespace: el namespace donde deployar la app
+
+![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/654cb216-06c4-4197-a76b-c957c8a6c007)
+
+
+
+![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/6642faed-7aa2-4a3a-9a89-d85bcd0bfe61)
+
+Con el CD en Argo ya tenemos el deploy del back y front de la app avatares con sus services e ingress en funcionamiento.
+
+[Avatares2 app](https://avatares2.chicho.com.ar/)
+---
 
 ## Probar aplicacion en un entorno de prueba con Docker-Compose
 Instalar docker y docker compose
