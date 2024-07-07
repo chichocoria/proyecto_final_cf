@@ -271,6 +271,13 @@ Cargar los siguientes datos:
  * Cluster URL: https://kubernetes.default.svc
  * Namespace: el namespace donde deployar la app
 
+![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/654cb216-06c4-4197-a76b-c957c8a6c007)
+
+
+
+![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/6642faed-7aa2-4a3a-9a89-d85bcd0bfe61)
+
+
 ---
 
 ## Probar aplicacion en un entorno de prueba con Docker-Compose
