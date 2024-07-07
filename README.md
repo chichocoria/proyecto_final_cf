@@ -235,6 +235,14 @@ Argo CD es una herramienta de entrega continua declarativa de GitOps para Kubern
 
 ---
 
+## Integracion Continua
+Se utiliza jenkins como servidor de Integracion Continua.
+
+
+
+
+---
+
 ## Probar aplicacion en un entorno de prueba con Docker-Compose
 Instalar docker y docker compose
 ```
