@@ -86,6 +86,7 @@ pveum aclmod / -user terraform-prov@pve -role TerraformProv
 
 ![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/0e92969c-4dfb-4b56-a1b4-4de3e2fe862d)
 
+---
 
 ## Terraform
 
@@ -161,6 +162,8 @@ Con estos pasos ya deberiamos tener la infraestructura para poder instalar Kuber
  * 2 Server Workers
  * Los registros DNS para utlizar con el Ingress Controller
 
+---
+
 ## Ansible
 Se va a utlilzar Ansible como configuration management para la instalacion de RKE2 en el Server Control Plane y en los dos servers Workers.
 
@@ -206,13 +209,31 @@ Corriendo los 3 Playbooks, ya deberiamos tener un cluster de RKE2 totalmente fun
 ### Instalar tools para el cluster RKE2
 
 #### MetalLB
+MetalLB es una implementación de balanceador de carga para cluster bare-metal kubernetes 
 Se instala MetalLB en el cluster como loadbalancer, no hace falta instalar Nginx Controller por que viene por defecto en la instalacion de RKE2.
 
 ```
 ~/proyecto_final_cf$ k8s/metallb/instalar-metallb-helm.sh
 ```
 
+#### Cert-Manager
+es un controlador de certificados X.509 potente y extensible para cargas de trabajo de Kubernetes y OpenShift. Obtendrá certificados de una variedad de emisores, tanto emisores públicos populares como emisores privados, y garantizará que los certificados sean válidos y estén actualizados, e intentará renovar los certificados en un momento configurado antes de su vencimiento.
 
+```
+~/proyecto_final_cf$ k8s/cert-manager/instalar-cert-manager.sh
+```
+
+#### Argo-CD
+Argo CD es una herramienta de entrega continua declarativa de GitOps para Kubernetes.
+
+```
+~/proyecto_final_cf$ k8s/argocd/instalar-argocd-helm.sh
+```
+
+> [!NOTE]
+> Ya enemos nuestro Cluster RKE2 con MetaLB, Nginx Controller, Cert-Manager y Argo CD. 
+
+---
 
 ## Probar aplicacion en un entorno de prueba con Docker-Compose
 Instalar docker y docker compose
