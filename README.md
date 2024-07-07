@@ -231,7 +231,7 @@ Argo CD es una herramienta de entrega continua declarativa de GitOps para Kubern
 ```
 
 > [!NOTE]
-> Ya enemos nuestro Cluster RKE2 con MetaLB, Nginx Controller, Cert-Manager y Argo CD. 
+> Ya tenemos nuestro Cluster RKE2 con MetaLB, Nginx Controller, Cert-Manager y Argo CD. 
 
 ---
 
