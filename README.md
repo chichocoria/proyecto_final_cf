@@ -203,6 +203,16 @@ Corriendo los 3 Playbooks, ya deberiamos tener un cluster de RKE2 totalmente fun
 
 ![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/beb51e2b-e982-4e4a-a321-c81c1e147f79)
 
+### Instalar tools para el cluster RKE2
+
+#### MetalLB
+Se instala MetalLB en el cluster como loadbalancer, no hace falta instalar Nginx Controller por que viene por defecto en la instalacion de RKE2.
+
+```
+~/proyecto_final_cf$ k8s/metallb/instalar-metallb-helm.sh
+```
+
+
 
 ## Probar aplicacion en un entorno de prueba con Docker-Compose
 Instalar docker y docker compose
