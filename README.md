@@ -253,6 +253,23 @@ El back y front tienen un JenkinsFile cada uno con los siguientes steps:
  * Remove de la imagen creada en el host
 
 ### ArgoCD
+Dentro de la GUI de Argo ir a "NEW APP"
+
+Cargar los siguientes datos:
+ 
+*GENERAL* 
+ * Application name: avatares
+ * Project name: default
+ * SYNC Policy: se usa manual o automatico para que sincronize directo cuando hay cambios en el repo
+
+*SOURCE*
+ * Repository URL: https://github.com/chichocoria/proyecto_final_cf.git
+ * Branch: testing
+ * Path: k8s/avatares-deployment/
+
+*DESTINATION*
+ * Cluster URL: https://kubernetes.default.svc
+ * Namespace: el namespace donde deployar la app
 
 ---
 
