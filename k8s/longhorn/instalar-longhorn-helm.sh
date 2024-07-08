@@ -25,7 +25,7 @@ kubectl create namespace longhorn-system
 
 # Instalar Longhorn
 helm install longhorn longhorn/longhorn --namespace longhorn-system
-
+sleep 60
 # Verificar la instalación
 kubectl get pods -n longhorn-system
 
