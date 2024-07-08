@@ -26,5 +26,5 @@
       shell: apt-get install jq -y
     - name: Install nfs-common
       become: yes
-      shell: apt-get install nfs-common
+      shell: apt-get install nfs-common -y
     
