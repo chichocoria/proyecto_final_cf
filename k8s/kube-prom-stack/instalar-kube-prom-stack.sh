@@ -16,17 +16,21 @@ then
     exit 1
 fi
 
-# Agregar el repositorio de Helm para Longhorn
+# Agregar el repositorio de Helm para kube-prom-stack
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 
-# Crear el espacio de nombres (namespace) para Longhorn
+# Crear el espacio de nombres (namespace) para las tools de monitoreo
 kubectl create namespace monitoring
 
 ##Instala kube-prom-stack
-helm install monitoring-prometheus-stack prometheus-community/kube-prometheus-stack --version 49.2.0 --namespace monitoring -f ~/proyecto_final_cf/k8s/kube-prom-stack/instalar-longhorn-helm.sh
+helm install monitoring-prometheus-stack prometheus-community/kube-prometheus-stack --version 49.2.0 --namespace monitoring -f ~/proyecto_final_cf/k8s/kube-prom-stack/prometheus-stack.yaml
 
 sleep 60
+
+### Agregar el repositorio de Helm para kube-prom-stack
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
 
 ##Instala loki-stack con persistencia de datos
 helm install loki --namespace=monitoring grafana/loki-stack \
@@ -42,6 +46,8 @@ helm install loki --namespace=monitoring grafana/loki-stack \
   --set 'promtail.tolerations[1].effect=NoSchedule'
 
 sleep 10
+# Parchear el svc para que nos de una IP el LoadBalancer
+kubectl patch svc monitoring-prometheus-stack-grafana -n monitoring -p '{"spec": {"type": "LoadBalancer"}}'
 
 # Proporcionar instrucciones para acceder a la interfaz de usuario de Longhorn
 echo "Para acceder a la interfaz de usuario de Longhorn, expone el servicio de Longhorn UI con el siguiente comando:"
