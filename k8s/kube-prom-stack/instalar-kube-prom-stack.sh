@@ -46,8 +46,6 @@ helm install loki --namespace=monitoring grafana/loki-stack \
   --set 'promtail.tolerations[1].effect=NoSchedule'
 
 sleep 10
-# Parchear el svc para que nos de una IP el LoadBalancer
-kubectl patch svc monitoring-prometheus-stack-grafana -n monitoring -p '{"spec": {"type": "LoadBalancer"}}'
 
 # Proporcionar instrucciones para acceder a la interfaz de usuario de Longhorn
 echo "Para acceder a la interfaz de usuario de Longhorn, expone el servicio de Longhorn UI con el siguiente comando:"

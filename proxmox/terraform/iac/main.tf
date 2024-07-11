@@ -153,3 +153,11 @@ resource "cloudflare_record" "avatares2" {
   type    = "CNAME"
   proxied = true
 }
+
+resource "cloudflare_record" "avatares2" {
+  zone_id = var.zone_id
+  name    = "monitoreo-avatares2"
+  value   = "chicho.com.ar"
+  type    = "CNAME"
+  proxied = true
+}
