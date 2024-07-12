@@ -53,3 +53,8 @@ echo "kubectl port-forward service/monitoring-prometheus-stack-grafana 9000:80 -
 echo "Luego, abre tu navegador y ve a http://localhost:9000 para acceder a la interfaz de usuario de grafana."
 echo "user:admin"
 echo "pass: prom-operator"
+
+#ingress para acceder desde afuera
+kubectl apply -f ~/proyecto_final_cf/k8s/kube-prom-stack/ingress-kube-prom-stack.yaml
+sleep 10
+echo "Ahora puede acceder a traves de "monitoreo-avatares2.chicho.com.ar"
