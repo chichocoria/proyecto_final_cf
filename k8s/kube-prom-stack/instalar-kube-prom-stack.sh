@@ -57,4 +57,4 @@ echo "pass: prom-operator"
 #ingress para acceder desde afuera
 kubectl apply -f ~/proyecto_final_cf/k8s/kube-prom-stack/ingress-kube-prom-stack.yaml -n monitoring
 sleep 10
-echo "Ahora puede acceder a traves de la url "https://monitoreo-avatares2.chicho.com.ar/"
+echo "Ahora puede acceder a traves de la url https://monitoreo-avatares2.chicho.com.ar/"
