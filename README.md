@@ -247,7 +247,7 @@ Loki: como Prometheus, pero para logs.
 ```
 
 > [!NOTE]
-> Ya tenemos nuestro Cluster RKE2 con MetaLB, Nginx Controller, Cert-Manager y Argo CD. 
+> Ya tenemos nuestro Cluster RKE2 con MetaLB, Nginx Controller, Cert-Manager, Argo CD, Longhorn, kube-prom-stack y loki-stack. 
 
 ---
 
