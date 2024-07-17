@@ -18,3 +18,13 @@
     - name: Install docker and docker-compose
       become: yes
       shell: apt install docker.io docker-compose -y
+    - name: Install open-iscsi
+      become: yes
+      shell: apt-get install open-iscsi
+    - name: Install jq
+      become: yes
+      shell: apt-get install jq -y
+    - name: Install nfs-common
+      become: yes
+      shell: apt-get install nfs-common -y
+    
