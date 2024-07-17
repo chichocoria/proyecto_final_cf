@@ -230,8 +230,24 @@ Argo CD es una herramienta de entrega continua declarativa de GitOps para Kubern
 ~/proyecto_final_cf$ k8s/argocd/instalar-argocd-helm.sh
 ```
 
+#### Longhorn
+Almacenamiento en bloque distribuido nativo de la nube para Kubernetes
+Lo vamos a utilizar para crear PVC de almacenamiento persinstente para grafana, prometheus, loki y alert manager
+
+```
+~/proyecto_final_cf/k8s/longhorn$ ./instalar-longhorn-helm.sh
+```
+
+#### Kube-prom-stack y Loki
+kube-prom-stack es una colección de manifiestos de Kubernetes, paneles  y  combinados con documentación y scripts para proporcionar un monitoreo de clústeres de Kubernetes de extremo a extremo fácil de operar con  usando  .
+Loki: como Prometheus, pero para logs.
+
+```
+~/proyecto_final_cf/k8s/kube-prom-stack$ ./instalar-kube-prom-stack.sh
+```
+
 > [!NOTE]
-> Ya tenemos nuestro Cluster RKE2 con MetaLB, Nginx Controller, Cert-Manager y Argo CD. 
+> Ya tenemos nuestro Cluster RKE2 con MetaLB, Nginx Controller, Cert-Manager, Argo CD, Longhorn, kube-prom-stack y loki-stack. 
 
 ---
 
