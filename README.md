@@ -297,6 +297,20 @@ Con el CD en Argo ya tenemos el deploy del back y front de la app avatares con s
 
 [Avatares2 app](https://avatares2.chicho.com.ar/)
 ---
+## Monitoreo y Observabilidad del Cluster
+Se instalo kube-prometheus-stack para metricas y loki-stack para logs de la aplicacion.
+Si bien la aplicacion no logea demasiado, se puede apreciar cuando corre tanto el back como el front.
+
+
+### Logs de la api
+![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/2152cf92-00d2-4294-bb27-c21077c1600b)
+
+## Logs del front
+![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/23792138-5714-4118-915d-498cea593692)
+
+## Monitoreo de la salud del Cluster
+![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/13039113-a387-453f-a54e-b3d8089f8938)
+---
 
 ## Probar aplicacion en un entorno de prueba con Docker-Compose
 Instalar docker y docker compose
@@ -393,19 +407,7 @@ Ahora podemos acceder a la URL para ver la aplicacion corriendo
 [Avatares app](https://avatares.chicho.com.ar/)
 
 
-## Monitoreo y Observabilidad del Cluster
-Se instalo kube-prometheus-stack para metricas y loki-stack para logs de la aplicacion.
-Si bien la aplicacion no logea demasiado, se puede apreciar cuando corre tanto el back como el front.
 
-
-### Logs de la api
-![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/2152cf92-00d2-4294-bb27-c21077c1600b)
-
-## Logs del front
-![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/23792138-5714-4118-915d-498cea593692)
-
-## Monitoreo de la salud del Cluster
-![image](https://github.com/chichocoria/proyecto_final_cf/assets/66035606/13039113-a387-453f-a54e-b3d8089f8938)
 
 
 
